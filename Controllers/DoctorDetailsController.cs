@@ -67,13 +67,23 @@ namespace HospitalSystem.Controllers
 
         [HttpPut("{DoctorId}")]
 
-        public async Task<IActionResult> UpdateDocDetailsAsync(int DoctorId, DoctorDetailDTO doctorDetailDto)
+        public async Task<IActionResult> GetDocDetailsAsync(int doctorId, DoctorDetail doctorDetail)
         {
-            if (DoctorId != doctorDetailDto.DoctorId)
+            if (doctorId != doctorDetail.DoctorId)
             {
-                return BadRequest("Doctor ID mismatch");
+                return BadRequest();
             }
-            
+            try
+            {
+                await _doctorDetailsService.UpdateDoctorDetailAsync(doctorId, doctorDetail);
+            }
+
+            catch(KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
+        
     }
 }

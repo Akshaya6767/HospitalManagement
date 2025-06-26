@@ -43,6 +43,19 @@ namespace HospitalManagement.Services.Services
         public async Task DeleteDocDetailsAsync(int DoctorId)
         {
             await _doctorDetailsRepository.DeleteDocDetailsAsync(DoctorId);
+
+        }
+        public async Task UpdateDoctorDetailAsync(int doctorId, DoctorDetail doctorDetail)
+        {
+            var updatedocdetail = new DoctorDetail
+            {
+                
+                DoctorName = doctorDetail.DoctorName,
+                ConsultationVenue = doctorDetail.ConsultationVenue,
+                Qualification = doctorDetail.Qualification,
+                Speciality = doctorDetail.Speciality,
+            };
+            await _doctorDetailsRepository.AddDocDetailAsync(updatedocdetail);
         }
     }
 }

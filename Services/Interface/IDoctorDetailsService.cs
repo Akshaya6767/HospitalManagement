@@ -9,5 +9,7 @@ namespace HospitalManagement.Services.Interface
         Task<IEnumerable<DoctorDetail>> GetAllDocDetailAsync();
         Task <DoctorDetail> GetDocDetailByNameAsync(string DoctorName);
         Task DeleteDocDetailsAsync(int DoctorId);
+        Task UpdateDoctorDetailAsync(int doctorId, DoctorDetail doctorDetail);
+
     }
 }

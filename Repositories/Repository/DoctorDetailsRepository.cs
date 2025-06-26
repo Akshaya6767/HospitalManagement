@@ -40,6 +40,25 @@ namespace HospitalManagement.Repositories.Repository
                 await _context.SaveChangesAsync();
             }
         }
+
+        public Task UpdateDoctorDetailAsync(int doctorId,DoctorDetail doctorDetail)
+        {
+            var existingDoctorDetail = _context.DoctorDetails.Find(doctorDetail.DoctorId);
+            if (existingDoctorDetail != null)
+            {
+                existingDoctorDetail.DoctorName = doctorDetail.DoctorName;
+                existingDoctorDetail.ConsultationVenue = doctorDetail.ConsultationVenue;
+                existingDoctorDetail.Qualification = doctorDetail.Qualification;
+                existingDoctorDetail.Speciality = doctorDetail.Speciality;
+                _context.DoctorDetails.Update(existingDoctorDetail);
+                _context.SaveChanges();
+                return Task.FromResult(existingDoctorDetail);
+            }
+            else
+            {
+                throw new KeyNotFoundException("Doctor detail not found.");
+            }
+        }
     }
 
 }
