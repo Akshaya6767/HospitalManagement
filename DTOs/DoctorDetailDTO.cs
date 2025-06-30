@@ -10,9 +10,9 @@ namespace HospitalManagement.DTOs
 {
     public class DoctorDetailDTO
     {
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int DoctorId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int DoctorId { get; set; }
 
         [Required]
         [StringLength(50)]

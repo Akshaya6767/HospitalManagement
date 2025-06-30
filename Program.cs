@@ -2,7 +2,7 @@
 using HospitalManagement.Repositories.Interface;
 using HospitalManagement.Repositories.Repository;
 using HospitalManagement.Services.Interface;
-using HospitalManagement.Services.Services;
+using HospitalManagement.Services.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +44,14 @@ namespace HospitalSystem
 
             builder.Services.AddScoped<IDoctorDetailsRepository, DoctorDetailsRepository>();
             builder.Services.AddScoped<IDoctorDetailsService, DoctorDetailsService>();
+            builder.Services.AddScoped<IPatientProfileRepository, PatientProfileRepository>();
+            builder.Services.AddScoped<IPatientProfileService, PatientProfileService>();
+            builder.Services.AddScoped<IStaffDetailRepository, StaffDetailRepository>();
+            builder.Services.AddScoped<IStaffDetailService, StaffDetailService>();
+            builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+            builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+
+
 
             builder.Services.AddEndpointsApiExplorer();
 

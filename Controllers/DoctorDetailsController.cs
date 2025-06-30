@@ -52,7 +52,7 @@ namespace HospitalSystem.Controllers
         }
 
         [HttpDelete("{DoctorId}")]
-        public async Task<IActionResult> DeleteDocDetailsAsync(int DoctorId)
+        public async Task<ActionResult<DoctorDetail>> DeleteDocDetailsAsync(int DoctorId)
         {
             try
             {
@@ -65,25 +65,25 @@ namespace HospitalSystem.Controllers
             return NoContent();
         }
 
-        [HttpPut("{DoctorId}")]
-
-        public async Task<IActionResult> GetDocDetailsAsync(int doctorId, DoctorDetail doctorDetail)
+        [HttpPut("{doctorId}")]
+        public async Task<IActionResult> UpdateDoctorDetailAsync(int doctorId, [FromBody] DoctorDetail doctorDetail)
         {
+            // Validate doctorId
             if (doctorId != doctorDetail.DoctorId)
             {
-                return BadRequest();
+                return BadRequest("The doctorId does not match the DoctorID in the provided details.");
             }
+
             try
             {
                 await _doctorDetailsService.UpdateDoctorDetailAsync(doctorId, doctorDetail);
+                return NoContent();
             }
-
-            catch(KeyNotFoundException)
+            catch (Exception ex)
             {
-                return NotFound();
+                // Log the exception (optional)
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            return NoContent();
         }
-        
     }
 }

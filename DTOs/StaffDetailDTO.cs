@@ -8,34 +8,24 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.DTOs
 {
-    public class PatientProfileDTO
+    public class StaffDetailDTO
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PatientID { get; set; }
+        public int StaffID { get; set; }
 
         [Required]
         [StringLength(20)]
         [RegularExpression("^[a-zA-Z ]*$")]
-        public string PatientName { get; set; }
+        public required string StaffName { get; set; }
 
         [Required]
-        [StringLength(200)]
-        public string Address { get; set; }
-
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime DateOfBirth { get; set; }
-
+        [StringLength(20)]
+        public required string Designation { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
-        public string PhoneNumber { get; set; }
 
-
-        [Required]
-        [RegularExpression(@"^[MFT]$")]
-        public char Gender { get; set; }
+        public int StaffPhoneNumber { get; set; }
     }
-}
-
+}   

@@ -44,16 +44,16 @@ namespace HospitalManagement.Repositories.Repository
             }
         }
 
-        public Task UpdatePatientProfileAsync(int PatientID, PatientProfileDTO patientProfileDTO)
+        public Task UpdatePatientProfileAsync(int PatientID, PatientProfile patientProfile)
         {
             var existingPatientProfile = _context.PatientProfiles.Find(PatientID);
             if (existingPatientProfile != null)
             {
-                existingPatientProfile.PatientName = patientProfileDTO.PatientName;
-                existingPatientProfile.Address = patientProfileDTO.Address;
-                existingPatientProfile.DateOfBirth = patientProfileDTO.DateOfBirth;
-                existingPatientProfile.PhoneNumber = patientProfileDTO.PhoneNumber;
-                existingPatientProfile.Gender = patientProfileDTO.Gender;
+                existingPatientProfile.PatientName = patientProfile.PatientName;
+                existingPatientProfile.Address = patientProfile.Address;
+                existingPatientProfile.DateOfBirth = patientProfile.DateOfBirth;
+                existingPatientProfile.PhoneNumber = patientProfile.PhoneNumber;
+                existingPatientProfile.Gender = patientProfile.Gender;
                 _context.PatientProfiles.Update(existingPatientProfile);
                 _context.SaveChanges();
                 return Task.FromResult(existingPatientProfile);

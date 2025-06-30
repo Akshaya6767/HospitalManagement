@@ -1,7 +1,7 @@
 ﻿using HospitalManagement.Models;
 using HospitalManagement.Repositories.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace HospitalManagement.Repositories.Repository
 {
@@ -26,11 +26,12 @@ namespace HospitalManagement.Repositories.Repository
             return await _context.DoctorDetails
                 .ToListAsync();
         }
-        public async Task<DoctorDetail> GetDocDetailByNameAsync(string DoctorName)
-        {
-            return await _context.DoctorDetails.FindAsync(DoctorName);
-        }
 
+        public async Task<DoctorDetail> GetDocDetailByNameAsync(string doctorName)
+        {
+            return await _context.DoctorDetails.FirstOrDefaultAsync(d => d.DoctorName == doctorName);
+        }
+        
         public async Task DeleteDocDetailsAsync(int DoctorId)
         {
             var docid = await _context.DoctorDetails.FindAsync(DoctorId);
@@ -41,24 +42,25 @@ namespace HospitalManagement.Repositories.Repository
             }
         }
 
-        public Task UpdateDoctorDetailAsync(int doctorId,DoctorDetail doctorDetail)
+        public async Task UpdateDoctorDetailAsync(int doctorId, DoctorDetail doctorDetail)
         {
-            var existingDoctorDetail = _context.DoctorDetails.Find(doctorDetail.DoctorId);
-            if (existingDoctorDetail != null)
+            // Validate doctorId
+            if (doctorId != doctorDetail.DoctorId)
             {
-                existingDoctorDetail.DoctorName = doctorDetail.DoctorName;
-                existingDoctorDetail.ConsultationVenue = doctorDetail.ConsultationVenue;
-                existingDoctorDetail.Qualification = doctorDetail.Qualification;
-                existingDoctorDetail.Speciality = doctorDetail.Speciality;
-                _context.DoctorDetails.Update(existingDoctorDetail);
-                _context.SaveChanges();
-                return Task.FromResult(existingDoctorDetail);
+                throw new ArgumentException("The doctorId does not match the DoctorID in the provided details.");
             }
-            else
-            {
-                throw new KeyNotFoundException("Doctor detail not found.");
-            }
-        }
-    }
 
+            _context.Entry(doctorDetail).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<DoctorDetail>> GetDocDetailByIdAndNameAsync(int doctorId, string doctorName)
+        {
+            return await _context.DoctorDetails
+                                 .Where(d => d.DoctorId == doctorId && d.DoctorName.Contains(doctorName))
+                                 .ToListAsync();
+        }
+
+        
+    }
 }

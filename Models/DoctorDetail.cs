@@ -10,6 +10,8 @@ namespace HospitalManagement.Models
 {
     public class DoctorDetail
     {
+        internal string Name;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DoctorId { get; set; }

@@ -9,7 +9,7 @@ namespace HospitalManagement.Repositories.Interface
         Task<IEnumerable<PatientProfile>> GetAllPatientProfileAsync();
         Task<PatientProfile> GetPatientProfileByIdAsync(int PatientID);
         Task DeletePatientProfileAsync(int PatientID);
-        Task UpdatePatientProfileAsync(int PatientID, PatientProfileDTO patientProfileDTO);
-
+        Task UpdatePatientProfileAsync(int PatientID, PatientProfile patientProfile);
+        
     }
 }

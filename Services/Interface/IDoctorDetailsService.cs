@@ -1,5 +1,6 @@
 ﻿using HospitalManagement.DTOs;
 using HospitalManagement.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Services.Interface
 {
@@ -10,6 +11,7 @@ namespace HospitalManagement.Services.Interface
         Task <DoctorDetail> GetDocDetailByNameAsync(string DoctorName);
         Task DeleteDocDetailsAsync(int DoctorId);
         Task UpdateDoctorDetailAsync(int doctorId, DoctorDetail doctorDetail);
+        
 
     }
 }

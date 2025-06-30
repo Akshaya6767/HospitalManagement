@@ -17,6 +17,7 @@ namespace HospitalManagement.Models
         [ForeignKey(nameof(PatientProfile))]
         public int PatientID { get; set; }
         public virtual PatientProfile PatientProfile { get; set; }
+
         [Required]
         [StringLength(300)]
         public required string Diagnosis { get; set; }

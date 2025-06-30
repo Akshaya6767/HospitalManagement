@@ -4,8 +4,9 @@ using HospitalManagement.Models;
 using HospitalManagement.Services.Interface;
 using HospitalManagement.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
-namespace HospitalManagement.Services.Services
+namespace HospitalManagement.Services.Service
 {
     public class DoctorDetailsService : IDoctorDetailsService
     {
@@ -34,10 +35,9 @@ namespace HospitalManagement.Services.Services
             return await _doctorDetailsRepository.GetAllDocDetailAsync();
         }
 
-        async Task<DoctorDetail> IDoctorDetailsService.GetDocDetailByNameAsync(string DoctorName)
+        public async Task<DoctorDetail> GetDocDetailByNameAsync(string DoctorName)
         {
-            var doctorDetail = await _doctorDetailsRepository.GetAllDocDetailAsync();
-            return doctorDetail.FirstOrDefault(d => d.DoctorName == DoctorName);
+            return await _doctorDetailsRepository.GetDocDetailByNameAsync(DoctorName);
         }
 
         public async Task DeleteDocDetailsAsync(int DoctorId)
@@ -49,14 +49,14 @@ namespace HospitalManagement.Services.Services
         {
             var updatedocdetail = new DoctorDetail
             {
-                
                 DoctorName = doctorDetail.DoctorName,
                 ConsultationVenue = doctorDetail.ConsultationVenue,
                 Qualification = doctorDetail.Qualification,
                 Speciality = doctorDetail.Speciality,
             };
-            await _doctorDetailsRepository.AddDocDetailAsync(updatedocdetail);
+            await _doctorDetailsRepository.UpdateDoctorDetailAsync(doctorId, updatedocdetail);
         }
+
+
     }
 }
-

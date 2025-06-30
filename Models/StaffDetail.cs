@@ -25,7 +25,6 @@ namespace HospitalManagement.Models
 
         [Required]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
-        [AllowedValues(typeof(int))]
-        public int StaffPhoneNumber { get; set; }
+        public required string StaffPhoneNumber { get; set; }
     }
 }
