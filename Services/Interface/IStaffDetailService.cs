@@ -5,30 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using HospitalManagement.DTOs;
 using HospitalManagement.Models;
-using HospitalManagement.Repositories.Interface;
-using HospitalManagement.Services.Interface;
-using HospitalManagement.Services.Service;
 
-namespace HospitalManagement.Services.Interface
+namespace HospitalManagement.Services
 {
     public interface IStaffDetailService
     {
-
-        Task<StaffDetail> AddStaffDetailAsync(StaffDetail staffDetail);
-
-        Task<IEnumerable<StaffDetail>> GetAllStaffDetailAsync();
-
-
-        Task DeleteStaffDetailsAsync(int staffID);
-
-        Task<StaffDetail> GetStaffDetailByIdAndNameAsync(int staffId, string staffName);
-        
-
-        Task<StaffDetail> GetStaffDetailByNameAsync(string staffName);
-
-
-
-        Task UpdateStaffDetailAsync(int staffId, StaffDetail staffDetail);
-        
+        Task<IEnumerable<StaffDetail>> GetAllAsync();
+        Task<StaffDetail?> GetByIdAsync(int id);
+        Task<IEnumerable<StaffDetail>> GetByNameAsync(string name);
+        Task<StaffDetail> AddAsync(StaffDetail staff);
+        Task<StaffDetail?> UpdateAsync(int id, StaffDetail staff);
+        Task<bool> DeleteAsync(int id);
     }
 }

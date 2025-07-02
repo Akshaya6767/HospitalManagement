@@ -16,7 +16,7 @@ namespace HospitalManagement.Models
 
             [ForeignKey(nameof(DoctorDetails))]
             public int DoctorID { get; set; }
-            public virtual required DoctorDetail DoctorDetails { get; set; }
+            public virtual DoctorDetail DoctorDetails { get; set; }
 
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString = "{dd-MM-yyyy}", ApplyFormatInEditMode = true)]

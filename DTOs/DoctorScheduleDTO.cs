@@ -11,12 +11,12 @@ namespace HospitalManagement.DTOs
 {
     public class DoctorScheduleDTO
     {
-       
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public virtual ICollection<PatientProfile> ApptDates { get; set; }
-        public DateOnly AppDate { get; set; }
+        [Key]
+        public int ScheduleID { get; set; }
+        public int DoctorID { get; set; }
 
-        public TimeOnly AvailableTimeSLot { get; set; }
+        public DateOnly AvailableDate { get; set; }
+
+        public int SlotID { get; set; } // Selected from dropdown
     }
 }

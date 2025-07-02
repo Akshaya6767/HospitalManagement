@@ -100,18 +100,27 @@ namespace HospitalManagement.Migrations
 
             modelBuilder.Entity("HospitalManagement.Models.DoctorSchedule", b =>
                 {
+                    b.Property<int>("ScheduleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleID"));
+
                     b.Property<DateOnly>("AppDate")
                         .HasColumnType("date");
 
-                    b.Property<TimeOnly>("AvailableTimeSLot")
-                        .HasColumnType("time");
+                    b.Property<string>("AvailableTimeSLot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorID")
                         .HasColumnType("int");
 
+                    b.HasKey("ScheduleID");
+
                     b.HasIndex("DoctorID");
 
-                    b.ToTable("DoctorSchedule");
+                    b.ToTable("DoctorSchedules");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.MedicalHistory", b =>
@@ -121,6 +130,9 @@ namespace HospitalManagement.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HistoryID"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfVisit")
                         .HasColumnType("datetime2");
@@ -132,6 +144,10 @@ namespace HospitalManagement.Migrations
 
                     b.Property<int>("PatientID")
                         .HasColumnType("int");
+
+                    b.Property<string>("PatientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Treatment")
                         .IsRequired()
@@ -164,6 +180,9 @@ namespace HospitalManagement.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DoctorScheduleScheduleID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
@@ -178,6 +197,8 @@ namespace HospitalManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PatientID");
+
+                    b.HasIndex("DoctorScheduleScheduleID");
 
                     b.ToTable("PatientProfiles");
                 });
@@ -217,8 +238,9 @@ namespace HospitalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SlotCode"));
 
-                    b.Property<TimeOnly>("Slot")
-                        .HasColumnType("time");
+                    b.Property<string>("Slot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SlotCode");
 
@@ -264,6 +286,18 @@ namespace HospitalManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("PatientProfile");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.PatientProfile", b =>
+                {
+                    b.HasOne("HospitalManagement.Models.DoctorSchedule", null)
+                        .WithMany("ApptDates")
+                        .HasForeignKey("DoctorScheduleScheduleID");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.DoctorSchedule", b =>
+                {
+                    b.Navigation("ApptDates");
                 });
 #pragma warning restore 612, 618
         }

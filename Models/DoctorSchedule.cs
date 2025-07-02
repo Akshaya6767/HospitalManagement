@@ -10,6 +10,9 @@ namespace HospitalManagement.Models
 {
     public class DoctorSchedule
     {
+        [Key]
+        public int ScheduleID { get; set; }
+
         [ForeignKey(nameof(DoctorDetails))]
         public int DoctorID { get; set; }
         public virtual DoctorDetail DoctorDetails { get; set; }
@@ -19,6 +22,7 @@ namespace HospitalManagement.Models
         public virtual ICollection<PatientProfile> ApptDates { get; set; }
         public DateOnly AppDate { get; set; }
 
-        public TimeOnly AvailableTimeSLot { get; set; }
+        public string AvailableTimeSLot { get; set; }
     }
 }
+

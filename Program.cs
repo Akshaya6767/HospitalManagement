@@ -1,6 +1,8 @@
 ﻿using HospitalManagement;
+using HospitalManagement.Repositories;
 using HospitalManagement.Repositories.Interface;
 using HospitalManagement.Repositories.Repository;
+using HospitalManagement.Services;
 using HospitalManagement.Services.Interface;
 using HospitalManagement.Services.Service;
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +52,12 @@ namespace HospitalSystem
             builder.Services.AddScoped<IStaffDetailService, StaffDetailService>();
             builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
             builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+            builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+            builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
+            builder.Services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
+            builder.Services.AddScoped<IDoctorScheduleService, DoctorScheduleService>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            builder.Services.AddScoped<IAppoinmentService,AppointmentService>();
 
 
 

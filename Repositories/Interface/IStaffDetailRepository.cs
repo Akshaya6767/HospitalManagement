@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HospitalManagement.Models;
+﻿using HospitalManagement.Models;
 
-namespace HospitalManagement.Repositories.Interface
+namespace HospitalManagement.Repositories
 {
-    public interface IStaffDetailRepository 
+    public interface IStaffDetailRepository
     {
-        Task<StaffDetail> AddStaffDetailAsync(StaffDetail staffDetail);
-        Task<IEnumerable<StaffDetail>> GetAllStaffDetailAsync();
-        Task<StaffDetail> GetStaffDetailByNameAsync(string staffName);
-        Task DeleteStaffDetailsAsync(int staffID);
-        Task UpdateStaffDetailAsync(int staffId, StaffDetail staffDetail);
-        Task<StaffDetail> GetStaffDetailByIdAndNameAsync(int staffId, string staffName);
+        Task<IEnumerable<StaffDetail>> GetAllAsync();
+        Task<StaffDetail?> GetByIdAsync(int id);
+        Task<IEnumerable<StaffDetail>> GetByNameAsync(string name);
+        Task<StaffDetail> AddAsync(StaffDetail staff);
+        Task<StaffDetail?> UpdateAsync(int id, StaffDetail staff);
+        Task<bool> DeleteAsync(int id);
     }
 }
+

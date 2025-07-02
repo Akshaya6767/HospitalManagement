@@ -1,50 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using HospitalManagement.Models;
-using HospitalManagement.Repositories.Interface;
-using HospitalManagement.Services.Interface;
+﻿using HospitalManagement.Models;
+using HospitalManagement.Repositories;
 
-namespace HospitalManagement.Services.Service
+namespace HospitalManagement.Services
 {
     public class StaffDetailService : IStaffDetailService
     {
-        private readonly IStaffDetailRepository _staffDetailRepository;
+        private readonly IStaffDetailRepository _repository;
 
-        public StaffDetailService(IStaffDetailRepository staffDetailRepository)
+        public StaffDetailService(IStaffDetailRepository repository)
         {
-            _staffDetailRepository = staffDetailRepository;
+            _repository = repository;
         }
 
-        public async Task<StaffDetail> AddStaffDetailAsync(StaffDetail staffDetail)
-        {
-            return await _staffDetailRepository.AddStaffDetailAsync(staffDetail);
-        }
-
-        public async Task<IEnumerable<StaffDetail>> GetAllStaffDetailAsync()
-        {
-            return await _staffDetailRepository.GetAllStaffDetailAsync();
-        }
-
-        public async Task DeleteStaffDetailsAsync(int staffID)
-        {
-            await _staffDetailRepository.DeleteStaffDetailsAsync(staffID);
-        }
-
-        public async Task<StaffDetail> GetStaffDetailByIdAndNameAsync(int staffId, string staffName)
-        {
-            return await _staffDetailRepository.GetStaffDetailByIdAndNameAsync(staffId, staffName);
-        }
-
-        public async Task<StaffDetail> GetStaffDetailByNameAsync(string staffName)
-        {
-            return await _staffDetailRepository.GetStaffDetailByNameAsync(staffName);
-        }
-
-        public async Task UpdateStaffDetailAsync(int staffId, StaffDetail staffDetail)
-        {
-            await _staffDetailRepository.UpdateStaffDetailAsync(staffId, staffDetail);
-        }
+        public Task<IEnumerable<StaffDetail>> GetAllAsync() => _repository.GetAllAsync();
+        public Task<StaffDetail?> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
+        public Task<IEnumerable<StaffDetail>> GetByNameAsync(string name) => _repository.GetByNameAsync(name);
+        public Task<StaffDetail> AddAsync(StaffDetail staff) => _repository.AddAsync(staff);
+        public Task<StaffDetail?> UpdateAsync(int id, StaffDetail staff) => _repository.UpdateAsync(id, staff);
+        public Task<bool> DeleteAsync(int id) => _repository.DeleteAsync(id);
     }
 }
 

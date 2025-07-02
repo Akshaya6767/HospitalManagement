@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HospitalManagement.Models;
-using HospitalManagement.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
-
-
-namespace HospitalManagement.Repositories.Repository
+namespace HospitalManagement.Repositories
 {
     public class StaffDetailRepository : IStaffDetailRepository
     {
@@ -20,49 +13,45 @@ namespace HospitalManagement.Repositories.Repository
             _context = context;
         }
 
-        public async Task<StaffDetail> AddStaffDetailAsync(StaffDetail staffDetail)
+        public async Task<IEnumerable<StaffDetail>> GetAllAsync() =>
+            await _context.StaffDetails.ToListAsync();
+
+        public async Task<StaffDetail?> GetByIdAsync(int id) =>
+            await _context.StaffDetails.FindAsync(id);
+
+        public async Task<IEnumerable<StaffDetail>> GetByNameAsync(string name) =>
+            await _context.StaffDetails
+                          .Where(s => s.StaffName.Contains(name))
+                          .ToListAsync();
+
+        public async Task<StaffDetail> AddAsync(StaffDetail staff)
         {
-            await _context.StaffDetails.AddAsync(staffDetail);
+            _context.StaffDetails.Add(staff);
             await _context.SaveChangesAsync();
-            return staffDetail;
+            return staff;
         }
 
-        public async Task<IEnumerable<StaffDetail>> GetAllStaffDetailAsync()
+        public async Task<StaffDetail?> UpdateAsync(int id, StaffDetail staff)
         {
-            return await _context.StaffDetails.ToListAsync();
-        }
+            var existing = await _context.StaffDetails.FindAsync(id);
+            if (existing == null) return null;
 
-        public async Task<StaffDetail> GetStaffDetailByNameAsync(string staffName)
-        {
-            return await _context.StaffDetails.FirstOrDefaultAsync(d => d.StaffName == staffName);
-        }
+            existing.StaffName = staff.StaffName;
+            existing.Designation = staff.Designation;
+            existing.StaffPhoneNumber = staff.StaffPhoneNumber;
 
-        public async Task DeleteStaffDetailsAsync(int staffID)
-        {
-            var staffDetail = await _context.StaffDetails.FindAsync(staffID);
-            if (staffDetail != null)
-            {
-                _context.StaffDetails.Remove(staffDetail);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateStaffDetailAsync(int staffId, StaffDetail staffDetail)
-        {
-            if (staffId != staffDetail.StaffID)
-            {
-                throw new ArgumentException("The staffId does not match the StaffID in the provided details.");
-            }
-
-            _context.Entry(staffDetail).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return existing;
         }
 
-        public async Task<StaffDetail> GetStaffDetailByIdAndNameAsync(int staffId, string staffName)
+        public async Task<bool> DeleteAsync(int id)
         {
-            return await _context.StaffDetails
-                                 .Where(d => d.StaffID == staffId && d.StaffName.Contains(staffName))
-                                 .FirstOrDefaultAsync();
+            var staff = await _context.StaffDetails.FindAsync(id);
+            if (staff == null) return false;
+
+            _context.StaffDetails.Remove(staff);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

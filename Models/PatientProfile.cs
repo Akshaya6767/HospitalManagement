@@ -37,7 +37,7 @@ namespace HospitalManagement.Models
         [RegularExpression(@"^[MFT]$")]
         public char Gender { get; set; }
 
-        public int Age { get; private set; }
+        public int Age { get; set; }
 
 
         //[StringLength(300)]

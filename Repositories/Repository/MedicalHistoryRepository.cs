@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HospitalManagement.DTOs;
 using HospitalManagement.Models;
 using HospitalManagement.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,11 @@ namespace HospitalManagement.Repositories.Repository
             return medicalHistory;
         }
 
+        public Task<MedicalHistory> AddMedicalHistoryAsync(MedicalHistoryDTO medicalHistorydto)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<MedicalHistory>> GetAllMedicalHistoriesAsync()
         {
             return await _context.MedicalHistories.ToListAsync();
@@ -38,5 +44,11 @@ namespace HospitalManagement.Repositories.Repository
             _context.Entry(medicalHistory).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public Task UpdateMedicalHistoryAsync(MedicalHistoryDTO medicalHistorydto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using HospitalManagement.DTOs;
 using HospitalManagement.Models;
 using HospitalManagement.Services.Interface;
-using HospitalManagement.Services.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagement.Controllers
@@ -25,27 +24,19 @@ namespace HospitalManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var medicalHistory = new MedicalHistory
-            {
-                Diagnosis = dto.Diagnosis,
-                Treatment = dto.Treatment,
-                DateOfVisit = dto.DateOfVisit,
-                
-            };
-
-            var created = await _medicalHistoryService.AddMedicalHistoryAsync(medicalHistory);
+            var created = await _medicalHistoryService.AddMedicalHistoryAsync(dto);
 
             var result = new MedicalHistoryDTO
             {
                 HistoryID = created.HistoryID,
                 Diagnosis = created.Diagnosis,
                 Treatment = created.Treatment,
-                DateOfVisit = created.DateOfVisit
+                DateOfVisit = created.DateOfVisit,
+                PatientID = created.PatientID
             };
 
             return CreatedAtAction(nameof(GetMedicalHistoryById), new { historyID = result.HistoryID }, result);
         }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicalHistory>>> GetAllMedicalHistories()
@@ -65,17 +56,13 @@ namespace HospitalManagement.Controllers
             return Ok(medicalHistory);
         }
 
+        
         [HttpPut("{historyID}")]
-        public async Task<IActionResult> UpdateMedicalHistory(int historyID, MedicalHistory medicalHistory)
+        public async Task<IActionResult> UpdateMedicalHistory(int historyID, [FromBody] MedicalHistoryDTO medicalHistorydto)
         {
-            if (historyID != medicalHistory.HistoryID)
-            {
-                return BadRequest("The historyID does not match the HistoryID in the provided details.");
-            }
-
             try
             {
-                await _medicalHistoryService.UpdateMedicalHistoryAsync(medicalHistory);
+                await _medicalHistoryService.UpdateMedicalHistoryAsync(historyID, medicalHistorydto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -83,7 +70,6 @@ namespace HospitalManagement.Controllers
                 return BadRequest($"Error updating medical history: {ex.Message}");
             }
         }
+
     }
 }
-
-

@@ -1,107 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using HospitalManagement.Models;
-using HospitalManagement.Services.Interface;
+﻿using HospitalManagement.Models;
+using HospitalManagement.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace HospitalManagement.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class StaffDetailController : ControllerBase
     {
-        private readonly IStaffDetailService _staffDetailService;
-        private readonly ILogger<StaffDetailController> _logger;
+        private readonly IStaffDetailService _service;
 
-        public StaffDetailController(IStaffDetailService staffDetailService, ILogger<StaffDetailController> logger)
+        public StaffDetailController(IStaffDetailService service)
         {
-            _staffDetailService = staffDetailService;
-            _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StaffDetail>>> GetAllStaff()
-        {
-            var staffdet = await _staffDetailService.GetAllStaffDetailAsync();
-            return Ok(staffdet);
-        }
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _service.GetAllAsync());
 
-        [HttpGet("{staffName}")]
-        public async Task<ActionResult<StaffDetail>> GetStaffDetailByNameAsync(string staffName)
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] int? id, [FromQuery] string? name)
         {
-            var staffDetail = await _staffDetailService.GetStaffDetailByNameAsync(staffName);
-            if (staffDetail == null)
+            if (id.HasValue)
             {
-                return NotFound();
+                var staffById = await _service.GetByIdAsync(id.Value);
+                return staffById == null ? NotFound() : Ok(new List<StaffDetail> { staffById });
             }
-            return Ok(staffDetail);
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var staffByName = await _service.GetByNameAsync(name);
+                return Ok(staffByName);
+            }
+
+            return BadRequest("Please provide either 'id' or 'name' as a query parameter.");
         }
 
         [HttpPost]
-        public async Task<ActionResult<StaffDetail>> PostStaffDetail(StaffDetail staffDetail)
+        public async Task<IActionResult> Create([FromBody] StaffDetail staff)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var createdStaffDetail = await _staffDetailService.AddStaffDetailAsync(staffDetail);
-                return CreatedAtAction(nameof(GetStaffDetailByNameAsync), new { staffName = createdStaffDetail.StaffName }, createdStaffDetail);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while creating staff detail.");
-                return StatusCode(500, "Internal server error");
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var created = await _service.AddAsync(staff);
+            return CreatedAtAction(nameof(Search), new { id = created.StaffID }, created);
         }
 
-        [HttpDelete("{staffID}")]
-        public async Task<IActionResult> DeleteStaffDetailsAsync(int staffID)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] StaffDetail staff)
         {
-            try
-            {
-                await _staffDetailService.DeleteStaffDetailsAsync(staffID);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while deleting staff detail.");
-                return BadRequest($"Error deleting staff details: {ex.Message}");
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var updated = await _service.UpdateAsync(id, staff);
+            return updated == null ? NotFound() : Ok(updated);
         }
 
-        [HttpGet("byIdAndName")]
-        public async Task<ActionResult<StaffDetail>> GetStaffDetailByIdAndNameAsync(int staffId, string staffName)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var staffDetail = await _staffDetailService.GetStaffDetailByIdAndNameAsync(staffId, staffName);
-            if (staffDetail == null)
-            {
-                return NotFound();
-            }
-            return Ok(staffDetail);
-        }
-
-        [HttpPut("{staffId}")]
-        public async Task<IActionResult> UpdateStaffDetailAsync(int staffId, [FromBody] StaffDetail staffDetail)
-        {
-            if (staffId != staffDetail.StaffID)
-            {
-                return BadRequest("The staffId does not match the StaffID in the provided details.");
-            }
-            try
-            {
-                await _staffDetailService.UpdateStaffDetailAsync(staffId, staffDetail);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while updating staff detail.");
-                return BadRequest($"Error updating staff details: {ex.Message}");
-            }
+            var deleted = await _service.DeleteAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
     }
 }

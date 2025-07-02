@@ -11,11 +11,8 @@ namespace HospitalManagement
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<DoctorDetail> DoctorDetails { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<DoctorSchedule>().HasNoKey();
-        }
-
+        public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
+             
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<PatientProfile> PatientProfiles { get; set; }
         public DbSet<StaffDetail> StaffDetails { get; set; }

@@ -17,6 +17,8 @@ namespace HospitalManagement.Models
         [ForeignKey(nameof(PatientProfile))]
         public int PatientID { get; set; }
         public virtual PatientProfile PatientProfile { get; set; }
+        public int Age { get; set; }
+        public string PatientName { get; set; }
 
         [Required]
         [StringLength(300)]
@@ -29,5 +31,6 @@ namespace HospitalManagement.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfVisit { get; set; }
+
     }
 }
