@@ -8,14 +8,14 @@ using HospitalManagement.Models;
 
 namespace HospitalManagement.Services.Interface
 {
-    public interface IAppoinmentService
+    public interface IAppointmentService
     {
         Task<Appointment> CreateAsync(AppointmentDTO dto);
         Task<Appointment?> UpdateAsync(int id, AppointmentDTO dto);
         Task<bool> DeleteAsync(int id);
         Task<IEnumerable<Appointment>> GetAllAsync();
         Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId);
-        Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(int phoneNumber);
+        Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(string phoneNumber);
     }
 }
 

@@ -1,69 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HospitalManagement.Models;
-using HospitalManagement.Repositories.Interface;
-using Microsoft.EntityFrameworkCore;
-
-namespace HospitalManagement.Repositories.Repository
-{
-    public class AppointmentRepository : IAppointmentRepository
+﻿    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using HospitalManagement.Models;
+    using HospitalManagement.Repositories.Interface;
+    using Microsoft.EntityFrameworkCore;
+    
+    namespace HospitalManagement.Repositories.Repository
     {
-            private readonly HospitalManagementDbContext _context;
+        public class AppointmentRepository : IAppointmentRepository
+        {       
+                private readonly HospitalManagementDbContext _context;
+                
+                public AppointmentRepository(HospitalManagementDbContext context)
+                {
+                    _context = context;
+                }
+                
+                public async Task<Appointment> CreateAsync(Appointment appointment)
+                {
+                    _context.Appointments.Add(appointment);
+                    await _context.SaveChangesAsync();
+                    return appointment;
+                }
 
-            public AppointmentRepository(HospitalManagementDbContext context)
-            {
-                _context = context;
-            }
+                public async Task<Appointment?> UpdateAsync(int id, Appointment updated)
+                {
+                    var existing = await _context.Appointments.FindAsync(id);
+                    if (existing == null) return null;
 
-            public async Task<Appointment> CreateAsync(Appointment appointment)
-            {
-                _context.Appointments.Add(appointment);
-                await _context.SaveChangesAsync();
-                return appointment;
-            }
+                    existing.AppointmentDate = updated.AppointmentDate;
+                    existing.Slot = updated.Slot;
+                    existing.Speciality = updated.Speciality;
+                    existing.ConsultationVenue = updated.ConsultationVenue;
+                    existing.Concern = updated.Concern;
+                    existing.Status = updated.Status;
 
-            public async Task<Appointment?> UpdateAsync(int id, Appointment updated)
-            {
-                var existing = await _context.Appointments.FindAsync(id);
-                if (existing == null) return null;
+                    await _context.SaveChangesAsync();
+                    return existing;
+                }
 
-                existing.AppointmentDate = updated.AppointmentDate;
-                existing.Slot = updated.Slot;
-                existing.Speciality = updated.Speciality;
-                existing.ConsultationVenue = updated.ConsultationVenue;
-                existing.Concern = updated.Concern;
-                existing.Status = updated.Status;
+                public async Task<bool> DeleteAsync(int id)
+                {
+                    var appt = await _context.Appointments.FindAsync(id);
+                    if (appt == null) return false;
 
-                await _context.SaveChangesAsync();
-                return existing;
-            }
+                    _context.Appointments.Remove(appt);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
 
-            public async Task<bool> DeleteAsync(int id)
-            {
-                var appt = await _context.Appointments.FindAsync(id);
-                if (appt == null) return false;
+                public async Task<IEnumerable<Appointment>> GetAllAsync() =>
+                    await _context.Appointments.ToListAsync();
 
-                _context.Appointments.Remove(appt);
-                await _context.SaveChangesAsync();
-                return true;
-            }
+                public async Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId) =>
+                    await _context.Appointments.Where(a => a.DoctorID == doctorId).ToListAsync();
 
-            public async Task<IEnumerable<Appointment>> GetAllAsync() =>
-                await _context.Appointments.ToListAsync();
+                public async Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(string phoneNumber)
+                {
+                    return await _context.Appointments
+                        .Where(a => a.PhoneNumber == phoneNumber && a.AppointmentDate >= DateOnly.FromDateTime(DateTime.Today))
+                        .ToListAsync();
+                }
 
-            public async Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId) =>
-                await _context.Appointments.Where(a => a.DoctorID == doctorId).ToListAsync();
-
-            public async Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(int phoneNumber) =>
-                await _context.Appointments
-                    .Where(a => a.PhoneNumber == phoneNumber && a.AppointmentDate >= DateOnly.FromDateTime(DateTime.Today))
-                    .ToListAsync();
-
-            public async Task<Appointment?> GetByIdAsync(int id) =>
-                await _context.Appointments.FindAsync(id);
+                public async Task<Appointment?> GetByIdAsync(int id) =>
+                        await _context.Appointments.FindAsync(id);
+        }
     }
-}
 

@@ -10,7 +10,7 @@ using HospitalManagement.Services.Interface;
 
 namespace HospitalManagement.Services.Service
 {
-    public class AppointmentService : IAppoinmentService
+    public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _repository;
 
@@ -53,7 +53,9 @@ namespace HospitalManagement.Services.Service
         public Task<bool> DeleteAsync(int id) => _repository.DeleteAsync(id);
         public Task<IEnumerable<Appointment>> GetAllAsync() => _repository.GetAllAsync();
         public Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId) => _repository.GetByDoctorIdAsync(doctorId);
-        public Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(int phoneNumber) => _repository.GetUpcomingByPatientAsync(phoneNumber);
+        public Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(string phoneNumber) => _repository.GetUpcomingByPatientAsync(phoneNumber);
+
+        
     }
 }
 

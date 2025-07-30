@@ -18,11 +18,11 @@ namespace HospitalManagement.DTOs
         public string Concern { get; set; } = string.Empty;
 
         [Required]
-        public TimeOnly Slot { get; set; }
+        public string Slot { get; set; }
 
         [Required]
-        [RegularExpression(@"^\\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
-        public int PhoneNumber { get; set; }
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
+        public string PhoneNumber { get; set; }
 
         public string? Speciality { get; set; }
 

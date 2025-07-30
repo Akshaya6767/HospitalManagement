@@ -14,9 +14,9 @@ namespace HospitalManagement.Controllers
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
-        private readonly IAppoinmentService _service;
+        private readonly IAppointmentService _service;
 
-        public AppointmentController(AppointmentService service)
+        public AppointmentController(IAppointmentService service)
         {
             _service = service;
         }
@@ -47,7 +47,7 @@ namespace HospitalManagement.Controllers
             Ok(await _service.GetByDoctorIdAsync(doctorId));
 
         [HttpGet("upcoming/{phoneNumber}")]
-        public async Task<IActionResult> GetUpcoming(int phoneNumber) =>
+        public async Task<IActionResult> GetUpcoming(string phoneNumber) =>
             Ok(await _service.GetUpcomingByPatientAsync(phoneNumber));
 
         [HttpGet]

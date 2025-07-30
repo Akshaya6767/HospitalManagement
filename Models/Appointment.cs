@@ -25,11 +25,11 @@ namespace HospitalManagement.Models
 
             public string? Speciality { get; set; }
             public required string Concern { get; set; }
-            public TimeOnly Slot { get; set; }
+            public string Slot { get; set; }
 
             [Required]
             [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits")]
-            public int PhoneNumber { get; set; }
+            public string PhoneNumber { get; set; }
 
             public string? ConsultationVenue { get; set; }
             public Stats Status { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HospitalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class _0 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,8 +111,8 @@ namespace HospitalManagement.Migrations
                     ApptDatesPatientID = table.Column<int>(type: "int", nullable: false),
                     Speciality = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Concern = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Slot = table.Column<TimeOnly>(type: "time", nullable: false),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
+                    Slot = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConsultationVenue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },

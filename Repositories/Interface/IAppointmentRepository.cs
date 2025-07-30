@@ -14,7 +14,7 @@ namespace HospitalManagement.Repositories.Interface
         Task<bool> DeleteAsync(int id);
         Task<IEnumerable<Appointment>> GetAllAsync();
         Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId);
-        Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(int phoneNumber);
+        Task<IEnumerable<Appointment>> GetUpcomingByPatientAsync(string phoneNumber);
         Task<Appointment?> GetByIdAsync(int id);
     }
 }

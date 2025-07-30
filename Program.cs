@@ -24,21 +24,7 @@ namespace HospitalSystem
             builder.Services.AddDbContext<HospitalManagementDbContext>(options => options.UseSqlServer
             (builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-
-                        builder.AllowAnyOrigin() // Replace with your frontend URL
-
-                               .AllowAnyMethod()
-
-                               .AllowAnyHeader();
-
-                    });
-
-            });
+            
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -57,7 +43,7 @@ namespace HospitalSystem
             builder.Services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
             builder.Services.AddScoped<IDoctorScheduleService, DoctorScheduleService>();
             builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-            builder.Services.AddScoped<IAppoinmentService,AppointmentService>();
+            builder.Services.AddScoped<IAppointmentService,AppointmentService>();
 
 
 
@@ -69,6 +55,15 @@ namespace HospitalSystem
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hospital Management", Version = "v1" });
 
             });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -78,7 +73,9 @@ namespace HospitalSystem
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("AllowAllOrigins");
+            app.UseCors("AllowAngularApp");
+
+            //app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
 

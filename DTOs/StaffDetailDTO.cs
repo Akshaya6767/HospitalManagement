@@ -26,6 +26,6 @@ namespace HospitalManagement.DTOs
         [Required]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
 
-        public int StaffPhoneNumber { get; set; }
+        public string StaffPhoneNumber { get; set; }
     }
 }   
