@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HospitalManagement.DTOs;
 using HospitalManagement.Models;
@@ -92,9 +92,27 @@ namespace HospitalManagement.Services.Service
             await _medicalHistoryRepository.UpdateMedicalHistoryAsync(medicalHistory);
         }
 
-        public Task UpdateMedicalHistoryAsync(int historyID, [FromBody] MedicalHistoryDTO medicalHistorydto)
+        public async Task UpdateMedicalHistoryAsync(int historyID, MedicalHistoryDTO medicalHistorydto)
         {
-            throw new NotImplementedException();
+            var patient = await _patientProfileRepository.GetPatientProfileByIdAsync(medicalHistorydto.PatientID);
+            if (patient == null)
+            {
+                throw new Exception("Patient not found");
+            }
+
+            var medicalHistory = new MedicalHistory
+            {
+                HistoryID = historyID,
+                PatientID = medicalHistorydto.PatientID,
+                Diagnosis = medicalHistorydto.Diagnosis,
+                Treatment = medicalHistorydto.Treatment,
+                DateOfVisit = medicalHistorydto.DateOfVisit,
+                PatientName = patient.PatientName,
+                Age = patient.Age,
+                PatientProfile = patient
+            };
+
+            await _medicalHistoryRepository.UpdateMedicalHistoryAsync(medicalHistory);
         }
     }
 }

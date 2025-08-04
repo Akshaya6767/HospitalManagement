@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
@@ -23,9 +23,11 @@ namespace HospitalManagement.Models
             public DateOnly AppointmentDate { get; set; }
             public virtual PatientProfile ApptDates { get; set; }
 
-            public string? Speciality { get; set; }
+            [Required]
+            public required string Speciality { get; set; }
             public required string Concern { get; set; }
-            public string Slot { get; set; }
+            [Required]
+            public required string Slot { get; set; }
 
             [Required]
             [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits")]

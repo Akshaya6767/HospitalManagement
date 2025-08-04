@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,9 +68,15 @@ namespace HospitalManagement.Controllers
         
         
 
-        [HttpPut("{PatientID}")]
-        public async Task<ActionResult> GetPatientProfileByIdAsync(int patientID, PatientProfileDTO patientProfiledto)
+        [HttpPut("{patientID}")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> UpdatePatientProfile(int patientID, [FromBody] PatientProfileDTO patientProfiledto)
         {
+            var userPatientIdClaim = User.Claims.FirstOrDefault(c => c.Type == "PatientID")?.Value;
+            if (userPatientIdClaim == null || userPatientIdClaim != patientID.ToString())
+            {
+                return Forbid("You are not authorized to update this profile.");
+            }
             if (patientID != patientProfiledto.PatientID)
             {
                 return BadRequest("Patient ID mismatch.");
@@ -78,14 +84,16 @@ namespace HospitalManagement.Controllers
             try
             {
                 await _patientProfileService.UpdatePatientProfileAsync(patientID, patientProfiledto);
-                
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-            return BadRequest("Error updating patient profile");
-            
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating patient profile: {ex.Message}");
+            }
         }
 
 

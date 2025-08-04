@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +13,6 @@ namespace HospitalManagement.Models
         public int SlotCode { get; set; }
 
         [Required]
-        public string Slot { get; set; }
+        public required string Slot { get; set; }
     }
 }
