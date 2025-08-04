@@ -8,6 +8,7 @@ using HospitalManagement.Models;
 using HospitalManagement.Services.Interface;
 using HospitalManagement.Services.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalManagement.Controllers
 {
@@ -66,8 +67,6 @@ namespace HospitalManagement.Controllers
             return NoContent();
         }
         
-        
-
         [HttpPut("{patientID}")]
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> UpdatePatientProfile(int patientID, [FromBody] PatientProfileDTO patientProfiledto)

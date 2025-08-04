@@ -5,20 +5,23 @@ using HospitalManagement.Repositories.Repository;
 using HospitalManagement.Services;
 using HospitalManagement.Services.Interface;
 using HospitalManagement.Services.Service;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Builder;
 using System.Text;
 
-namespace HospitalSystem
+namespace HospitalManagement
 {
     public class Program
     {
+
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -50,9 +53,6 @@ namespace HospitalSystem
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                 };
             });
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IDoctorDetailsRepository, DoctorDetailsRepository>();
             builder.Services.AddScoped<IDoctorDetailsService, DoctorDetailsService>();
@@ -74,12 +74,9 @@ namespace HospitalSystem
 
 
             builder.Services.AddEndpointsApiExplorer();
-
             builder.Services.AddSwaggerGen(c =>
-
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hospital Management", Version = "v1" });
-
             });
 
             builder.Services.AddCors(options =>
